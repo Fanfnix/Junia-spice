@@ -1,0 +1,30 @@
+package com.jad.entity;
+
+import lombok.Getter;
+import lombok.Setter;
+
+import java.time.LocalTime;
+
+@Getter
+@Setter
+public class OperationType {
+    private Integer id;
+    private String label;
+    private Byte minNbComponents;
+    private Byte maxNbComponents;
+    private LocalTime duration;
+    private Integer lossOfQuantity;
+    private Integer idProducttype;
+
+    public OperationType(final Integer id, final String label, final Byte minNbComponents, final Byte maxNbComponents,
+                         final LocalTime duration,
+                         final Integer lossOfQuantity, final Integer idProducttype) {
+        this.id = id;
+        this.label = label;
+        this.minNbComponents = minNbComponents;
+        this.maxNbComponents = maxNbComponents;
+        this.duration = duration;
+        this.lossOfQuantity = lossOfQuantity;
+        this.idProducttype = idProducttype;
+    }
+}
