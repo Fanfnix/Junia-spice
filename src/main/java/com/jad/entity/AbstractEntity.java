@@ -4,13 +4,15 @@ import com.google.gson.*;
 
 import java.lang.reflect.Type;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 abstract class AbstractEntity {
     private static final Gson gson = new GsonBuilder()
             .registerTypeAdapter(LocalDate.class, new LocalDateTypeAdapter())
-            .registerTypeAdapter(LocalDate.class, new LocalTimeTypeAdapter())
+            .registerTypeAdapter(LocalTime.class, new LocalTimeTypeAdapter())
+            .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
             .create();
 
     public String toJson() {
@@ -38,7 +40,7 @@ abstract class AbstractEntity {
             return LocalDate.parse(json.getAsString(), this.formatter);
         }
     }
- 
+
     private static class LocalTimeTypeAdapter implements JsonSerializer<LocalTime>, JsonDeserializer<LocalTime> {
         private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
 
@@ -55,6 +57,24 @@ abstract class AbstractEntity {
             return LocalTime.parse(json.getAsString(), this.formatter);
         }
 
+
+    }
+
+    private static class LocalDateTimeAdapter implements JsonSerializer<LocalDateTime>,
+                                                         JsonDeserializer<LocalDateTime> {
+        @Override
+        public JsonElement serialize(LocalDateTime localDateTime, Type type,
+                                     JsonSerializationContext jsonSerializationContext) {
+            return new JsonPrimitive(localDateTime.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
+        }
+
+        @Override
+        public LocalDateTime deserialize(JsonElement jsonElement, Type type,
+                                         JsonDeserializationContext jsonDeserializationContext) throws
+                                                                                                JsonParseException {
+            String ldtString = jsonElement.getAsString();
+            return LocalDateTime.parse(ldtString, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+        }
 
     }
 }
